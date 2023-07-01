@@ -6,7 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts" 
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.16.2",
@@ -15,7 +15,9 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
