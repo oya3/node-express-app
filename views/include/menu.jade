@@ -1,0 +1,31 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-light(style='z-index: initial;')
+  a.navbar-brand(href='/') ホームタイトル
+  button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+    span.navbar-toggler-icon
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      if (user)
+        // user管理
+        li.nav-item
+          a.nav-link(href='/users') ユーザ管理
+        li.nav-item.dropdown
+          a#navbarDropdownUser.nav-link.dropdown-toggle.text-lowercase(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+            | demo
+          .dropdown-menu(aria-labelledby='navbarDropdownUser')
+            a.dropdown-item(href='/demos/threejs_cube') 3D model
+            a.dropdown-item(href='/demos/threejs_bone') 3D bone
+            a.dropdown-item(href='/demos/rank') rank
+
+    ul.navbar-nav
+      if (user)
+        li.nav-item.dropdown
+          a#navbarDropdownUser.nav-link.dropdown-toggle.text-lowercase(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+            | user: #{user.name}
+          .dropdown-menu(aria-labelledby='navbarDropdownUser')
+            a.dropdown-item(href='/users/#{user.id}') profile
+            .dropdown-divider
+            a.dropdown-item(href='/users/sign_out') sign-out
+      else
+        li.nav-item
+          a.nav-link.text-lowercase(href='/users/sign_in')
+            | sign-in

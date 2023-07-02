@@ -1,0 +1,46 @@
+// extends で呼び出すjade内は絶対パスで表現する必要がある
+// 絶対パスにしないと、本ファイルからの相対パスとなるため not found となる
+extends ../layout
+
+block main_content
+  .container-fluid
+    br
+    p.text-center Sign-in
+    hr
+    .row
+      .col-md-6.offset-md-3
+        form(action='/users/sign_in', method='post')
+          .form-group
+            label.bmd-label-floating(for='exampleInputUsername1') username
+            input#exampleInputUsername1.form-control(type='text', value='#{username}', name='username')
+            if( errors )
+              if( errors.array().some(error => error.path === 'username') )
+                .alert.alert-danger(role='alert')
+                  for error in errors.array().filter(error => error.path === 'username')
+                    li #{error.msg}
+          .form-group
+            label.bmd-label-floating(for='exampleInputPassword1') password
+            input#exampleInputPassword1.form-control(type='password', value='', name='password')
+            if( errors )
+              if( errors.array().some(error => error.path === 'password') )
+                .alert.alert-danger(role='alert')
+                  for error in errors.array().filter(error => error.path === 'password')
+                     li #{error.msg}
+          .form-group
+            button.btn.btn-primary.btn-raised.btn-sm(type='submit') sign-in
+          .form-group
+            a.ForgetPwd(href='#') Forget Password?
+        // ここはsign-inに失敗した場合のメッセージエリア
+        // バリデートは突破してけど、登録されてないemail or passowrdの場合に表示
+        if (message && message.length !== 0)
+          .alert.alert-danger(role='alert')
+            span ERROR: #{message}
+        hr
+        //- ここはバリデートのメッセージエリア
+        if errors
+          //- div #{JSON.stringify(errors.array())}
+          //- div #{JSON.stringify(errors.body_errors)}
+          .alert.alert-danger(role='alert') Errors
+            hr
+            for error in errors.array()
+              div #{error.path}:#{error.msg}

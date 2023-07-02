@@ -1,0 +1,52 @@
+// extends で呼び出すjade内は絶対パスで表現する必要がある
+// 絶対パスにしないと、本ファイルからの相対パスとなるため not found となる
+extends ../layout
+
+block main_content
+  .container-fluid
+    //-   センタリングされてるか実験
+    //- .row
+    //-   .col-md-6.offset-md-3.text-center .col-md-6 .offset-md-3
+    br
+    p.text-center users
+    hr
+    .row
+      .col-md-6.offset-md-3
+        table.table.table-sm
+          thead
+            tr
+              th(scope='col') #
+              //- th(scope='col') id
+              th(scope='col') email
+              th(scope='col') name
+              //- th(scope='col') password
+              th(scope='col') role
+              th(scope='col') 
+              th(scope='col') 
+          tbody
+            - for(var i=0; i<users.length; i++) {
+              tr
+                th(scope='row') #{i}
+                //- td #{users[i].id}
+                td #{users[i].username}
+                //- td #{users[i].password}
+                td #{users[i].name}
+                td #{users[i].email}
+                td #{users[i].role}
+                td
+                  form(action='/users/#{users[i].id}/edit', method='get')
+                    button.btn.btn-info.btn-raised.btn-sm(type='submit') edit
+                td
+                  form(id='delete-user#{i}' action='/users/#{users[i].id}', method='post')
+                    input(type='hidden', name='_method', value='delete')
+                    //- button.btn.btn-danger.btn-raised(type='submit') delete
+                    button.btn.btn-danger.btn-raised.btn-sm(type='button', data-toggle='modal', data-target='#modal-ok-cancel', data-modal-title='delete?', data-modal-body='user name: #{users[i].name}', data-modal-submit='#delete-user#{i}') delete
+            - }
+    .row
+      .col-md-6.offset-md-3
+        hr
+        form(action='/users/new', method='get')
+          button.btn.btn-primary.btn-raised.btn-sm(type='submit') new
+
+  include ../include/modal
+  

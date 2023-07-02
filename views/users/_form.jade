@@ -1,0 +1,70 @@
+//- form 項目別エラー表示
+mixin _form_item_error(item_name)
+  if( errors )
+    if( item_name in errors.body_errors )
+      .alert.alert-danger(role='alert')
+        for error in errors.body_errors[item_name]
+          li #{error}
+
+//- form 項目
+mixin _form_items(method)
+  if(method == 'put')
+    .form-group
+      label.bmd-label-floating(for='exampleInputId1') id
+      input#exampleInputId1.form-control(type='text', name='id', value='#{target_user.id}', disabled)
+      +_form_item_error('id')
+      input#exampleInputId1.form-control(type='hidden', name='id', value='#{target_user.id}')
+
+  .form-group
+    label.bmd-label-floating(for='exampleInputUserName1') username
+    input#exampleInputUserName1.form-control(type='text', name='username', value='#{target_user.username}')
+    +_form_item_error('username')
+
+  .form-group
+    label.bmd-label-floating(for='exampleInputPassword1') password
+    input#exampleInputPassword1.form-control(type='password', name='password', value='#{target_user.password}')
+    +_form_item_error('password')
+
+  .form-group
+    label.bmd-label-floating(for='exampleInputName1') name
+    input#exampleInputName1.form-control(type='text', name='name', value='#{target_user.name}')
+    +_form_item_error('name')
+
+  .form-group
+    label.bmd-label-floating(for='exampleInputEmail1') email address
+    //- type='email' にするとjs が色々してしまうのでやめる input#exampleInputEmail1.form-control(type='email', name='email', value='#{target_user.email}')
+    input#exampleInputEmail1.form-control(type='text', name='email', value='#{target_user.email}')
+    span.bmd-help We'll never share your email with anyone else.
+    +_form_item_error('email')
+
+  .form-group
+    label.bmd-label-floating(for='exampleInputRole1') role
+    .radio
+      label
+        input#optionsRadios1(type='radio', name='role', value='admin', checked=(target_user.role === 'admin'), disabled=(user.role !== 'admin'))
+        | admin
+    .radio
+      label
+        input#optionsRadios2(type='radio', name='role', value='user', checked=(target_user.role !== 'admin'))
+        | user
+    +_form_item_error('role')
+
+  button.btn.btn-default(type="button", onclick='history.back()') Cancel
+  button.btn.btn-primary.btn-raised.btn-sm(type='submit') Submit
+
+  hr
+  if errors
+    .alert.alert-danger(role='alert') Errors
+      hr
+      for error in errors.array()
+        div #{error.param}: #{error.msg}
+
+//- form 全体
+mixin _form(action, method)
+  if( method == 'post' )
+    form(action='#{action}', method='#{method}')
+      +_form_items(method)
+  else
+    form(action='#{action}', method='post')
+      input(type='hidden', name='_method', value='#{method}')
+      +_form_items(method)

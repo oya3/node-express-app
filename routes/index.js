@@ -1,9 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+/* GET index page. */
+router.get('/', function(request, response, next) {
+  // if ( request.isAuthenticated() ) {
+  //   // ログイン済みなら 別ページにリダイレクトさせることもできる
+  //   return res.redirect("/");
+  // }
+  response.render('index', { title: 'Express', user: request.user });
 });
 
 module.exports = router;

@@ -1,0 +1,13 @@
+// Modal OK or Cancel
+#modal-ok-cancel.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modal-ok-cancel-title', aria-hidden='true')
+  .modal-dialog.modal-dialog-centered(role='document')
+    .modal-content
+      .modal-header
+        h5#exampleModalLongTitle.modal-title title
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+      .modal-body
+        | body
+      .modal-footer
+        button#modal-ok-cancel-cancel.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+        button#modal-ok-cancel-ok.btn.btn-primary(type='button') OK

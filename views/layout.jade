@@ -1,7 +1,22 @@
+//- 本ファイルは extends して呼び出されるため、絶対パス表記で記載すること
 doctype html
-html
+html(lang='ja')
   head
+    meta(charset='utf-8')
     title= title
+    link(rel="stylesheet", href="/node_modules/bootstrap-material-design-icons/css/material-icons.min.css")
+    link(rel='stylesheet', href='/node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="/node_modules/jquery/dist/jquery.min.js")
+    script(src="/node_modules/popper.js/dist/umd/popper.js")
+    script(src="/node_modules/bootstrap-material-design/dist/js/bootstrap-material-design.js")
+    //- script(src="/node_modules/chart.js/dist/chart.umd.js")
+    script(src="/node_modules/chart.js/dist/Chart.bundle.min.js")
+    script(src="/javascripts/modal.js")
+    script
+      | $(document).ready(function() { $('body').bootstrapMaterialDesign(); });
   body
-    block content
+    //- block main_content
+    include /include/menu
+    //- main.container(role='main')
+    block main_content

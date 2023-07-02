@@ -1,0 +1,43 @@
+// extends で呼び出すjade内は絶対パスで表現する必要がある
+// 絶対パスにしないと、本ファイルからの相対パスとなるため not found となる
+extends ../layout
+
+block main_content
+  .container-fluid
+    br
+    p.text-center #{target_user.name} profile
+    hr
+    .row
+      .col-md-6.offset-md-3
+        table.table.table-striped
+          tbody
+            tr
+              td id
+              td.text-right.h5= target_user.id
+            tr
+              td username
+              td.text-right.h5= target_user.username
+            tr
+              td password
+              td.text-right.h5= target_user.password
+            tr
+              td name
+              td.text-right.h5= target_user.name
+            tr
+              td email
+              td.text-right.h5= target_user.email
+            tr
+              td role
+              td.text-right.h5= target_user.role
+        // ボタンでかつリンクを張る方法がイマイチわからない
+        // a タグを使うと文字の下部にアンダーバーが入ってデザインが崩れる。。。
+        // 本来どうするかはわからん。。。
+        form(action='/users/#{target_user.id}/edit', method='get')
+          button.btn.btn-info.btn-raised.btn-sm(type='submit') edit
+        hr
+        form#delete-user(action='/users/#{target_user.id}', method='post')
+          input(type='hidden', name='_method', value='delete')
+          //- button.btn.btn-danger.btn-raised(type='submit') delete
+          button.btn.btn-danger.btn-raised.btn-sm(type='button', data-toggle='modal', data-target='#modal-ok-cancel', data-modal-title='delete?', data-modal-body='user name: #{target_user.name}', data-modal-submit='#delete-user') delete
+
+        include ../include/modal

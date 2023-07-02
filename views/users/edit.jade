@@ -1,0 +1,13 @@
+//- extends で呼び出すjade内は絶対パスで表現する必要がある
+//- 絶対パスにしないと、本ファイルからの相対パスとなるため not found となる
+include ./_form
+extends ../layout
+
+block main_content
+  .container-fluid
+    br
+    p.text-center #{target_user.name} profile
+    hr
+    .row
+      .col-md-6.offset-md-3
+        +_form('/users/'+target_user.id, 'put')

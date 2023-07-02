@@ -1,0 +1,116 @@
+extends ../layout
+
+block main_content
+  .container-fluid
+    canvas#canvas
+
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/three.js/89/three.min.js")
+  script(type='text/javascript').
+    window.addEventListener('load', init);
+    function init() {
+      // レンダラーを作成
+      var renderer = new THREE.WebGLRenderer({
+        canvas: document.querySelector('#canvas')
+      });
+      // シーンを作成
+      var scene = new THREE.Scene();
+      // カメラ
+      width = window.innerWidth;
+      height = window.innerHeight;
+      // カメラを作成
+      camera = new THREE.PerspectiveCamera(45, width / height);
+      camera.position.set(0, 0, +70);
+      // 初期化のために実行
+      onResize();
+      // リサイズイベント発生時に実行
+      window.addEventListener('resize', onResize);
+      // arm を作る
+      var armGeometry = new THREE.CylinderGeometry(5, 5, 40, 3, 4, true);
+      armGeometry.bones = [
+      {
+        name: "bone0",
+        parent: -1,
+        pos: [0, -20, 0],
+        rotq: [0, 0, 0, 1],
+        scl: [1, 1, 1],
+      },
+      {
+        name: "bone1",
+        parent: 0,
+        pos: [0, 10, 0],
+        rotq: [0, 0, 0, 1],
+        scl: [1, 1, 1],
+      },
+      {
+        name: "bone2",
+        parent: 1,
+        pos: [0, 10, 0],
+        rotq: [0, 0, 0, 1],
+        scl: [1, 1, 1],
+      },
+      {
+        name: "bone3",
+        parent: 2,
+        pos: [0, 10, 0],
+        rotq: [0, 0, 0, 1],
+        scl: [1, 1, 1],
+      },
+      {
+        name: "bone4",
+        parent: 3,
+        pos: [0, 10, 0],
+        rotq: [0, 0, 0, 1],
+        scl: [1, 1, 1],
+      },
+      ];
+      armGeometry.skinIndices = [
+        new THREE.Vector4(4, 3, -1, -1), new THREE.Vector4(4, 3, -1, -1), new THREE.Vector4(4, 3, -1, -1),
+        new THREE.Vector4(3, 4,  2, -1), new THREE.Vector4(3, 4,  2, -1), new THREE.Vector4(3, 4,  2, -1),
+        new THREE.Vector4(2, 3,  1, -1), new THREE.Vector4(2, 3,  1, -1), new THREE.Vector4(2, 3,  1, -1),
+        new THREE.Vector4(1, 2,  0, -1), new THREE.Vector4(1, 2,  0, -1), new THREE.Vector4(1, 2,  0, -1),
+        new THREE.Vector4(0, 1, -1, -1), new THREE.Vector4(0, 1, -1, -1), new THREE.Vector4(0, 1, -1, -1),
+      ];
+      armGeometry.skinWeights = [
+        new THREE.Vector4(.8, .2,  0, 0), new THREE.Vector4(.8, .2,  0, 0), new THREE.Vector4(.8, .2,  0, 0),
+        new THREE.Vector4(.6, .2, .2, 0), new THREE.Vector4(.6, .2, .2, 0), new THREE.Vector4(.6, .2, .2, 0),
+        new THREE.Vector4(.6, .2, .2, 0), new THREE.Vector4(.6, .2, .2, 0), new THREE.Vector4(.6, .2, .2, 0),
+        new THREE.Vector4(.6, .2, .2, 0), new THREE.Vector4(.6, .2, .2, 0), new THREE.Vector4(.6, .2, .2, 0),
+        new THREE.Vector4(.8, .2,  0, 0), new THREE.Vector4(.8, .2,  0, 0), new THREE.Vector4(.8, .2,  0, 0),
+      ];
+      var armMaterial = new THREE.MeshNormalMaterial({
+        skinning: true, // これをつけないと、bone での変形が効かない
+        side: THREE.DoubleSide,
+        shading: THREE.FlatShading,
+      });
+      var arm = new THREE.SkinnedMesh(armGeometry, armMaterial);
+      // ボーンの確認用のヘルパーを作る
+      var skeletonHelper = new THREE.SkeletonHelper(arm);
+      // シーンにオブジェクトを追加
+      scene.add(arm);
+      scene.add(skeletonHelper);
+      // 毎フレーム呼び出す処理
+      var lastTime = 0; // 前回の時間
+      function step(time) {
+        var elapsedTime = time - lastTime; // 前回のstepからの経過時間
+        arm.rotation.y += elapsedTime * .0002; // 見やすいようにモデルを少しずつ回す
+        arm.skeleton.bones[1].rotation.z = Math.sin(time * 0.001) * .5;
+        arm.skeleton.bones[2].rotation.y = Math.sin(time * 0.002) * 1;
+        arm.skeleton.bones[3].rotation.x = Math.sin(time * 0.003) * .5;
+        skeletonHelper.update();
+        renderer.render(scene, camera);
+        lastTime = time;
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      function onResize() {
+        // サイズを取得
+        width = window.innerWidth;
+        height = window.innerHeight;
+        // レンダラーのサイズを調整する
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
+        // カメラのアスペクト比を正す
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      }
+    }
